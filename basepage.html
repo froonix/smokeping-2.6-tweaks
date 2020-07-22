@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>SmokePing Latency Page for <##title##></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="refresh" content="<##step##>">
+		<style>
+
+			@media screen
+			{
+				body
+				{
+					background: #eee;
+					font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+					font-size: 12px;
+					margin: 0;
+					display: inline-block;
+					width: 100%;
+				}
+
+				h1
+				{
+					font-size: 32px;
+					line-height:32px;
+					font-weight: 400;
+					margin: 10px 5px;
+				}
+
+				h2
+				{
+					font-size: 16px;
+					line-height:16px;
+					font-weight: 400;
+					margin: 5px;
+				}
+
+				small
+				{
+					font-size: 10px;
+				}
+
+				hr
+				{
+					display: none;
+				}
+
+				img
+				{
+					border: 0;
+				}
+
+				.sidebar
+				{
+					background: #4c4c4c;
+					position: fixed;
+					top: 0;
+					left: 0;
+					width: 250px;
+					height: 100%;
+					color: #ccc;
+				}
+
+				.sidebar-header
+				{
+					border-bottom: 1px solid #373737;
+					height: 50px;
+					position: relative;
+					padding: 10px;
+					box-sizing: border-box;
+				}
+
+				.sidebar-header .logo
+				{
+					margin: 0;
+					display: inline-block;
+					padding: 0 5px;
+				}
+
+				.sidebar-menu
+				{
+					overflow-x: hidden;
+					overflow-y: auto;
+					position: absolute;
+					top: 51px;
+					bottom: 0px;
+					width: 249px;
+				}
+
+				.sidebar #filter_title, .sidebar .hierarchy-label
+				{
+					display: none;
+				}
+
+				.sidebar #filter_text, .sidebar .hierarchy-popup
+				{
+					margin: 10px;
+				}
+
+				.sidebar .hierarchy-popup select
+				{
+					width: 100%;
+				}
+
+				.sidebar #filter_text input
+				{
+					width: 100%;
+					box-sizing: border-box;
+					border: 0;
+					padding: 5px;
+					border-radius: 3px;
+					background-color: #232323;
+					color: #ccc;
+				}
+
+				.sidebar table.menu
+				{
+					margin: 0;
+					padding: 0;
+					padding-bottom: 10px;
+				}
+
+				.sidebar table.menu td, div.menuitem, div.menuactive
+				{
+					margin: 2px 10px;
+					border: 1px solid transparent;
+					position: relative;
+				}
+
+				.sidebar table.menu td.menuopen, .sidebar table.menu td:hover, .sidebar table.menu td.menuactive, div.menuitem:hover, div.menuactive:hover
+				{
+					border: 1px solid #4a4a4a;
+					background: #232323;
+					color: #fff;
+				}
+
+				.sidebar table.menu td a, div.menuitem a, div.menuactive a
+				{
+					color: #ccc;
+					padding-left: 5px;
+					text-decoration: none;
+				}
+
+				.sidebar table.menu td a.menulinkactive
+				{
+					color: #67c2ef;
+				}
+
+				.sidebar table.menu td table
+				{
+					background: #343434;
+					padding: 5px;
+				}
+
+				.navbar
+				{
+					height: 50px;
+					border-bottom: 1px solid #afafaf;
+					background: linear-gradient(#f8f8f8,#eee);
+					box-sizing: border-box;
+					position: fixed;
+					top: 0;
+					right: 0;
+					left: 250px;
+					box-shadow: 0 3px 1px -1px rgba(0,0,0,0.05);
+					text-shadow: 0 1px 1px rgba(255,255,255,0.9);
+				}
+
+				.navbar .navbar-menu
+				{
+					border-right: 1px solid #afafaf;
+					height: 50px;
+					display: inline-block;
+				}
+
+				.navbar .navbar-user
+				{
+					border-left: 1px solid #afafaf;
+					height: 50px;
+					display: inline-block;
+					right: 0;
+					position: absolute;
+					padding: 0 10px;
+					line-height: 50px;
+					font-size: 14px;
+					font-weight: 500;
+				}
+
+				.navbar .navbar-user .icon-person
+				{
+					background: no-repeat left url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAQAAABLCVATAAAA1ElEQVR4Ae3SPUoDYRSG0QPqDGQD4v9qdAu6BBGNcQO6FME+lbgCLSQhEqMb0EK7QSRoCuFqKcOHzIyIzZynf+HC1fqlXM/A1MzIkVxDaybiWxMrGshNRKmxTG09kWhPbQOR6EptU5Go+Meh9GmXauuKRLtqy92KUjcWNLBqXPqiZQ1lDlx79WboUKb1Jzq2nOi7V/j4qnCn79imjooyOy7MhHTvzm3L/Ghe17Oo0JN9c6RtGIkaDa1LWPIoavZgkbIz0aBTyl5EgwrKolntUIUqa30CLm2RNE9+n04AAAAASUVORK5CYII=');
+					width: 32px;
+					height: 32px;
+					display: inline-block;
+					vertical-align: middle;
+					padding-right: 10px;
+					opacity: 0.3;
+				}
+
+				a#menu-button
+				{
+					background: no-repeat center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAQAAABLCVATAAAAJUlEQVR4AWOgKhgFo+A/eXAIGIQAo2A0HY2mo9F0NJqORsEoAAAO8PsFZyNgiAAAAABJRU5ErkJggg==);
+					text-indent: 100%;
+					white-space: nowrap;
+					overflow: hidden;
+					display: block;
+					opacity: 0.3;
+					height: 50px;
+					width: 50px;
+				}
+
+				a#menu-button:hover
+				{
+					opacity: 0.5;
+				}
+
+				.main
+				{
+					padding-left: 250px;
+					margin: 10px 10px;
+					padding-top: 50px;
+					display: inline-block;
+				}
+
+				.main .panel
+				{
+					border: 1px solid #d4d4d4;
+					box-shadow: 0 2px 1px -1px rgba(0,0,0,0.1);
+					background: #fff;
+					margin: 5px;
+					display: inline-block;
+				}
+
+				.main .panel-heading
+				{
+					background: #f5f5f5;
+					border-bottom: 1px solid #d4d4d4;
+					box-shadow: inset 0 0 1px 1px #fff;
+				}
+
+				.main .panel-heading h2
+				{
+					margin: 0;
+					padding-left: 10px;
+					line-height: 30px;
+					font-size: 14px;
+					font-weight: 500;
+				}
+
+				.main .panel-body
+				{
+					padding: 5px;
+				}
+
+				.footer
+				{
+					border-top: 1px solid #d4d4d4;
+					padding-left: 250px;
+				}
+
+				.footer p
+				{
+					display: inline-block;
+					margin: 5px 10px;
+				}
+
+				.footer p.footer-right
+				{
+					float: right;
+				}
+
+				.footer, .footer a
+				{
+					color: #747474;
+					text-decoration: none;
+				}
+
+				.footer a:hover
+				{
+					text-decoration: underline;
+				}
+
+				.sidebar-hidden .sidebar
+				{
+					left: -250px !important;
+				}
+
+				.sidebar-hidden .main, .sidebar-hidden .footer
+				{
+					padding-left: 0 !important;
+				}
+
+				.sidebar-hidden .navbar
+				{
+					left: 0 !important;
+				}
+
+				@media (max-width: 900px)
+				{
+					.sidebar, .navbar
+					{
+						transition: left 0.4s ease;
+					}
+
+					.sidebar
+					{
+						left: -250px;
+					}
+
+					.navbar
+					{
+						left: 0;
+					}
+
+					.main, .footer
+					{
+						padding-left: 0;
+					}
+
+					.sidebar-visible .sidebar
+					{
+						left: 0px !important;
+					}
+
+					.sidebar-visible .navbar
+					{
+						left: 250px !important;
+					}
+				}
+			}
+
+			@media print
+			{
+				body, html
+				{
+					font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+					font-size: 12px;
+				}
+
+				img
+				{
+					border: 0;
+				}
+
+				.sidebar, .navbar
+				{
+					display: none;
+				}
+
+				.panel
+				{
+					page-break-inside: avoid;
+				}
+
+				.panel h2
+				{
+					font-size: 12px;
+				}
+			}
+
+		</style>
+	</head>
+	<body id="body">
+		<div class="sidebar" id="sidebar">
+			<div class="sidebar-header">
+				<div class="logo">
+					<a href="/smokeping/"><img alt="Smokeping" src="data:image/png;base64,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" /></a>
+				</div>
+				<div class="logo">
+					<a href="/smokeping/"><img alt="RRDtool" src="data:image/png;base64,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" /></a>
+				</div>
+			</div>
+			<div class="sidebar-menu">
+				<##menu##>
+			</div>
+		</div>
+		<div class="navbar">
+			<div class="navbar-menu"><a id="menu-button" href="#">Toggle Menu</a></div>
+			<div class="navbar-user"><div class="icon-person"></div><##authuser##></div>
+		</div>
+		<div class="main">
+			<h1><##title##></h1>
+			<h2><##remark##></h2>
+			<div class="overview">
+				<##overview##>
+			</div>
+			<div class="details">
+				<##body##>
+			</div>
+		</div>
+		<hr />
+		<div class="footer">
+			<p class="footer-right"><small>Running on <##smokeping##> by <##author##></small></p>
+			<p><small>Maintained by <a href="mailto:<##contact##>"><##owner##></a></small></p>
+		</div>
+		<script src="/smokeping/prototype/prototype.js"></script>
+		<script src="/smokeping/scriptaculous/scriptaculous.js?load=builder,effects,dragdrop"></script>
+		<script src="/smokeping/cropper/cropper.js"></script>
+		<script src="/smokeping/smokeping-zoom.js"></script>
+		<script>
+
+			Event.observe(window, 'load', function()
+			{
+				$('menu-button').observe('click', function (e)
+				{
+					if($('sidebar').getStyle('left') == '0px')
+					{
+						$('body').addClassName('sidebar-hidden');
+						$('body').removeClassName('sidebar-visible');
+					}
+					else
+					{
+						$('body').removeClassName('sidebar-hidden');
+						$('body').addClassName('sidebar-visible');
+					}
+
+					Event.stop(e);
+				});
+
+				if($('zoom') != null)
+				{
+					myCropper = new Cropper.Img('zoom',
+					{
+						minHeight: $('zoom').getDimensions().height,
+						maxHeight: $('zoom').getDimensions().height,
+						onEndCrop: changeRRDImage
+					});
+				}
+			});
+
+			document.getElementsByName('filter')[0].placeholder = 'Filter menu...';
+
+		</script>
+	</body>
+</html>
